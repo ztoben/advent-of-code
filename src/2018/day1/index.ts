@@ -1,13 +1,9 @@
-const fs = require('fs');
+import {getValues} from "../../helpers/getValues";
 const path = require('path');
-const input = fs.readFileSync(path.resolve(__dirname, 'input.txt'), 'utf8');
-
-function getValues() {
-  return input.toString().split("\n").filter((v: string) => v);
-}
+const inputPath = path.resolve(__dirname, 'input.txt');
 
 function part1() {
-  const values: Array<string> = getValues();
+  const values: Array<string> = getValues(inputPath);
   let total: bigint  = 0n;
 
   values.forEach(val => total += BigInt(val));
@@ -16,7 +12,7 @@ function part1() {
 }
 
 function part2() {
-  let values: Array<string> = getValues();
+  let values: Array<string> = getValues(inputPath);
   let frequency: bigint = 0n;
   let duplicateFrequencyFound: boolean = false;
   let pastFrequencies: Array<bigint> = [frequency];

@@ -1,13 +1,15 @@
-import walkSync from './src/walkSync';
+import walkSync from './src/helpers/walkSync';
 const {prompt} = require('enquirer');
 
 const buildYearChoices = () => {
   const years: Array<string> = [];
 
   let directorySearch = function(filePath: string, _stat: any) {
-    const year: Array<string> = filePath.match(/\/([^\/]+)\/?$/) || [];
+    const directory: Array<string> = filePath.match(/\/([^\/]+)\/?$/) || [];
 
-    years.push(year.length > 0 ? year[1] : filePath);
+    if (directory.length > 0 && directory[1] !== 'helpers') {
+      years.push(directory[1])
+    }
   };
 
   walkSync('./src', directorySearch, false);
