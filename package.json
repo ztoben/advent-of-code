@@ -18,9 +18,9 @@
   },
   "homepage": "https://github.com/ztoben/advent-of-code#readme",
   "devDependencies": {
-    "@types/node": "10.12.11",
+    "@types/node": "10.12.12",
     "ts-node": "7.0.1",
-    "typescript": "3.2.1"
+    "typescript": "next"
   },
   "dependencies": {
     "enquirer": "2.1.1"
