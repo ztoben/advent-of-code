@@ -14,8 +14,7 @@ function part1() {
       counts[char] = (counts[char] || 0) + 1;
     });
 
-    return [...new Set(Object.values(counts)
-      .filter(val => val > 1))];
+    return [...new Set(Object.values(counts).filter(val => val > 1))];
   });
 
   lineLetterCounts.forEach(line => {
