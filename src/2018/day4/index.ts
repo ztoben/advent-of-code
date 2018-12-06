@@ -112,8 +112,6 @@ function part2() {
     });
   });
 
-  console.log(guards[guardKey][highestMinuteKey]);
-
   console.log('part 2:', parseInt(guardKey) * parseInt(highestMinuteKey));
 }
 
