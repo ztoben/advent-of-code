@@ -1,5 +1,7 @@
 import walkSync from './src/helpers/walkSync';
 const {prompt} = require('enquirer');
+const path = require('path');
+const fs = require('fs');
 
 const buildYearChoices = () => {
   const years: Array<string> = [];
@@ -36,27 +38,52 @@ const buildDayChoices = (year: Number) => {
 };
 
 async function main() {
+  const isNew: boolean = process.env.mode === 'new';
+
   const chooseYear = [{
     type: 'select',
     name: 'year',
-    message: 'Which year would you like to run a solution from?',
+    message: isNew
+      ? 'Which year should a solution be created in?'
+      : 'Which year would you like to run a solution from?',
     initial: 0,
     choices: buildYearChoices()
   }];
 
   const {year} = await prompt(chooseYear);
 
-  const chooseDay = [{
-    type: 'select',
-    name: 'day',
-    message: 'Which day would you like to run?',
-    initial: 0,
-    choices: buildDayChoices(year)
-  }];
+  if (isNew) {
+    const chooseFolder = {
+      type: 'input',
+      name: 'folderName',
+      message: 'Folder name?'
+    };
 
-  const {day} = await prompt(chooseDay);
+    const {folderName} = await prompt(chooseFolder);
+    const dirName = `./src/${year}/${folderName}`;
 
-  require(`./src/${year}/${day}/index.ts`);
+    if (!fs.existsSync(dirName)){
+      fs.mkdirSync(dirName);
+    }
+
+    fs.closeSync(fs.openSync(path.resolve(__dirname, 'src', year, folderName, 'index.ts'), 'w'));
+    fs.closeSync(fs.openSync(path.resolve(__dirname, 'src', year, folderName, 'readme.md'), 'w'));
+    fs.closeSync(fs.openSync(path.resolve(__dirname, 'src', year, folderName, 'input.txt'), 'w'));
+
+    console.log('Created files in ' + dirName);
+  } else {
+    const chooseDay = [{
+      type: 'select',
+      name: 'day',
+      message: 'Which day would you like to run?',
+      initial: 0,
+      choices: buildDayChoices(year)
+    }];
+
+    const {day} = await prompt(chooseDay);
+
+    require(`./src/${year}/${day}/index.ts`);
+  }
 }
 
 main();
