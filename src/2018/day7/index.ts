@@ -89,8 +89,7 @@ function addWorkerTask(workers: {[key: string]: {[key: string]: number}}, worker
 function workOneSecond(
   workers: {[key: string]: {[key: string]: number}},
   movesTaken: Array<string>,
-  availableMoves: {[key: string]: Array<string>},
-  removedKeys: Array<string>
+  availableMoves: {[key: string]: Array<string>}
 ) {
   for (let x = 0; x < Object.keys(workers).length; x++) {
     const worker = workers[x];
@@ -109,7 +108,6 @@ function workOneSecond(
           const newval = val.filter(i => i !== task);
 
           if (newval.length === 0) {
-            removedKeys.push(key);
             delete availableMoves[key];
           } else {
             availableMoves[key] = val.filter(i => i !== task);
@@ -117,15 +115,6 @@ function workOneSecond(
         });
 
         movesTaken.push(task);
-
-        // const availableMovesLength = Object.keys(availableMoves).length;
-        //
-        // if (availableMovesLength === 0) {
-        //   movesTaken.push(...[task, ...removedKeys.sort()]);
-        // } else {
-        //   removedKeys = removedKeys.filter(v => v !== task);
-        //   movesTaken.push(task);
-        // }
       }
     }
   }
@@ -144,7 +133,6 @@ function part2() {
   */
   const movesTaken: Array<string> = [];
   const movesAddedToWorkers: Array<string> = [];
-  let removedKeys: Array<string> = [];
   let seconds: number = 0;
 
   while(movesLeft > 0) {
@@ -161,7 +149,7 @@ function part2() {
       }
     });
 
-    workOneSecond(workers, movesTaken, availableMoves, removedKeys);
+    workOneSecond(workers, movesTaken, availableMoves);
     seconds++;
 
     movesLeft = Object.keys(availableMoves).length;
